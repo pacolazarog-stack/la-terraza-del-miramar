@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Prueba de audio · La terraza del Miramar</title>
+<style>
+html,body{height:100%;margin:0}body{display:grid;place-items:center;background:radial-gradient(circle at 50% 25%,#102840,#05070b 58%,#020305);color:#f4eee8;font-family:Georgia,'Times New Roman',serif;padding:24px;box-sizing:border-box}.card{width:min(760px,94vw);padding:34px;border:1px solid rgba(255,255,255,.14);background:rgba(5,8,13,.82);box-shadow:0 28px 70px rgba(0,0,0,.5);text-align:center}.k{font:11px/1.2 system-ui,sans-serif;letter-spacing:.28em;text-transform:uppercase;color:#bd4c43}.card h1{font-weight:400;text-transform:uppercase;letter-spacing:.06em;margin:14px 0 8px}.card p{color:#c3b8af;font-style:italic}.go{margin:20px 0 16px;border:1px solid #9b241d;background:rgba(155,36,29,.18);color:#fff;padding:13px 22px;border-radius:999px;cursor:pointer;font:12px/1 system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase}audio{width:100%;margin-top:8px}.status{margin-top:12px;color:#b9ada5;font:12px/1.4 system-ui,sans-serif}.back{display:inline-block;margin-top:22px;color:#d2b27c;text-decoration:none;font:12px/1 system-ui,sans-serif}
+</style>
+</head>
+<body>
+<div class="card">
+<div class="k">Prueba web de audio</div>
+<h1>La terraza del Miramar</h1>
+<p>Comprobación de reproducción del máster web en GitHub Pages.</p>
+<button id="go" class="go">Probar audio</button>
+<audio id="a" controls preload="metadata" src="MIRAMAR_AUDIO_WEB_64K.mp3"></audio>
+<div id="status" class="status">Archivo: MIRAMAR_AUDIO_WEB_64K.mp3 · duración esperada 48:34,7</div>
+<a class="back" href="./">← Volver al flipbook</a>
+</div>
+<script>
+const a=document.getElementById('a'),s=document.getElementById('status');
+document.getElementById('go').onclick=async()=>{try{await a.play();s.textContent='Audio reproduciéndose correctamente.'}catch(e){s.textContent='El navegador ha bloqueado la reproducción; pulsa ▶ en el reproductor.'}};
+a.addEventListener('loadedmetadata',()=>{s.textContent='Audio cargado · '+Math.floor(a.duration/60)+':'+String(Math.floor(a.duration%60)).padStart(2,'0')});
+a.addEventListener('error',()=>{s.textContent='No se pudo cargar el MP3 desde GitHub Pages.'});
+</script>
+</body>
+</html>
