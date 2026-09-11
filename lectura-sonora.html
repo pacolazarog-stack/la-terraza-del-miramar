@@ -11,7 +11,7 @@ iframe{width:100%;height:100%;border:0;background:#05070b}
 #bar{display:flex;align-items:center;gap:9px;padding:8px 12px;background:#080b12;border-top:1px solid rgba(255,255,255,.14)}
 button{height:36px;min-width:38px;border-radius:18px;border:1px solid rgba(255,255,255,.18);background:#10151f;color:#eee;cursor:pointer}
 button.on{border-color:#c18b48;color:#f2d3aa;background:#221b13}
-#scene{min-width:230px;max-width:390px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;color:#d1c7bd}
+#scene{min-width:250px;max-width:440px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;color:#d1c7bd}
 #seek{flex:1;accent-color:#a53129}#vol{width:90px;accent-color:#c18b48}.time{font-size:11px;color:#aaa;white-space:nowrap}
 @media(max-width:800px){#wrap{grid-template-rows:1fr 92px}#bar{flex-wrap:wrap}.time{display:none}#vol{display:none}#scene{order:5;max-width:none;min-width:0;flex:1 1 100%}}
 </style>
@@ -34,14 +34,13 @@ const A=document.getElementById('audio'),F=document.getElementById('book'),P=doc
 const PART1='audio/LA_TERRAZA_DEL_MIRAMAR_MASTER_64K_PARTE_1_ESC_01-15.mp3';
 const PART2='audio/LA_TERRAZA_DEL_MIRAMAR_MASTER_64K_PARTE_2_ESC_16-30.mp3';
 const SPLIT=1830.432,TOTAL=3822.912;
-const cues=[0,69.672,175.872,251.424,308.112,472.800,578.832,728.520,855.048,990.528,1088.040,1245.432,1402.272,1498.992,1704.480,1830.432,1909.920,2018.760,2130.360,2294.088,2418.096,2506.536,2612.088,2701.848,2787.288,2887.728,3024.408,3174.168,3260.976,3626.232];
-const titles=['Primer WhatsApp','Dos letras y un desastre','El cuerpo en casa','CLAC','Donde antes no había escena','No es que mire','Primera incursión terrestre','Diecisiete con cuatro','La comunidad toma la palabra','Primera votación','Antiguo Testamento del bloque','Dos cosas ciertas','Ropa · frontera · muro','Nace el Estado · Toga · bandera · reina','Ganar una cárcel','El viento recurre','El sol da fe','Señoría la sábana','Informe del informe','El edificio es un ojo','Innovar para no hablar','El sistema perfecto','Junta de una sola persona','Catastro del cotilleo','Vicente puso una sábana','La ausencia también ocupa','No te miro. Pero me mides','¿Cómo seguimos?','¡HE! COMUNIDAD','Diez minutos'];
-const pageScene={12:1,13:2,14:3,15:4,16:5,17:5,18:6,19:6,20:7,21:8,22:9,23:9,24:10,25:11,26:12,27:12,28:13,29:14,30:15,31:16,32:17,33:18,34:18,35:18,36:19,37:20,38:21,39:22,40:23,41:24,42:24,43:25,44:26,45:27,46:27,47:28,53:29,54:29,55:29,56:29,57:29,58:29,59:29,60:29,61:29,62:29,63:29,64:30,65:30,66:30,67:30};
-let sync=true,lastState=0,currentScene=null,unlocked=false,currentPart=1,switching=false;
+const titles=["Primer WhatsApp", "Dos letras y un desastre", "El cuerpo en casa", "CLAC", "Donde antes no había escena", "No es que mire", "Primera incursión terrestre", "Diecisiete con cuatro", "La comunidad toma la palabra", "Primera votación", "Antiguo Testamento del bloque", "Dos cosas ciertas", "Ropa · frontera · muro", "Nace el Estado · Toga · bandera · reina", "Ganar una cárcel", "El viento recurre", "El sol da fe", "Señoría la sábana", "Informe del informe", "El edificio es un ojo", "Innovar para no hablar", "El sistema perfecto", "Junta de una sola persona", "Catastro del cotilleo", "Vicente puso una sábana", "La ausencia también ocupa", "No te miro. Pero me mides", "¿Cómo seguimos?", "¡HE! COMUNIDAD", "Diez minutos"];
+const PW={"12":[0,69.672,1],"13":[69.672,175.872,2],"14":[175.872,251.424,3],"15":[251.424,308.112,4],"16":[308.112,472.8,5],"18":[472.8,578.832,6],"20":[578.832,728.52,7],"21":[728.52,855.048,8],"22":[855.048,970.264,9],"23":[970.264,990.528,9],"24":[990.528,1088.04,10],"25":[1088.04,1245.432,11],"26":[1245.432,1402.272,12],"28":[1402.272,1498.992,13],"29":[1498.992,1704.48,14],"30":[1704.48,1830.432,15],"31":[1830.432,1909.92,16],"32":[1909.92,2018.76,17],"33":[2018.76,2108.607,18],"34":[2108.607,2130.36,18],"36":[2130.36,2294.088,19],"37":[2294.088,2418.096,20],"38":[2418.096,2506.536,21],"39":[2506.536,2612.088,22],"40":[2612.088,2701.848,23],"41":[2701.848,2787.288,24],"43":[2787.288,2887.728,25],"44":[2887.728,3024.408,26],"45":[3024.408,3130.121,27],"46":[3130.121,3174.168,27],"47":[3174.168,3260.976,28],"53":[3260.976,3332.64,29],"54":[3332.64,3363.684,29],"55":[3363.684,3393.406,29],"56":[3393.406,3420.487,29],"57":[3420.487,3452.521,29],"58":[3452.521,3480.922,29],"59":[3480.922,3506.351,29],"60":[3506.351,3534.753,29],"61":[3534.753,3559.522,29],"62":[3559.522,3589.574,29],"63":[3589.574,3626.232,29],"64":[3626.232,3700.413,30],"65":[3700.413,3762.373,30],"66":[3762.373,3819.786,30],"67":[3819.786,3822.912,30]};
+const ACT_SILENCE=new Set([17,19,27,35,42]);
+let sync=true,lastState=0,currentScene=null,currentPage=1,pageEnd=null,waiting=false,unlocked=false,currentPart=1,switching=false;
 A.volume=.82;
-const fmt=s=>{s=Math.max(0,s||0);let h=Math.floor(s/3600),m=Math.floor((s%3600)/60),x=Math.floor(s%60);return (h?h+':':'')+String(m).padStart(h?2:1,'0')+':'+String(x).padStart(2,'0')};
+const fmt=s=>{s=Math.max(0,s||0);let h=Math.floor(s/3600),m=Math.floor((s%3600)/60),x=Math.floor(s%60);return(h?h+':':'')+String(m).padStart(h?2:1,'0')+':'+String(x).padStart(2,'0')};
 function icon(){P.textContent=A.paused?'▶':'❚❚'}
-function mode(page){if(page>=48&&page<=52)return'interlude';if(page>=68)return'appendix';if(pageScene[page])return pageScene[page];return'front'}
 function globalTime(){return(currentPart===1?0:SPLIT)+(A.currentTime||0)}
 function sourceForGlobal(g){return g<SPLIT?1:2}
 function srcForPart(p){return p===1?PART1:PART2}
@@ -58,24 +57,60 @@ async function setGlobal(g,autoplay=false){
   if(autoplay&&unlocked){try{await A.play()}catch(e){}}icon();
 }
 async function unlock(){try{A.muted=true;await A.play();A.pause();A.currentTime=0;A.muted=false;unlocked=true}catch(e){A.muted=false;unlocked=true}}
+function stopWithLabel(label){A.pause();pageEnd=null;waiting=false;currentScene=null;L.textContent=label;icon()}
 async function goPage(page,force=false){
-  if(!sync)return;let m=mode(page);
-  if(m==='front'){A.pause();currentScene=null;L.textContent='Preliminares · audio en espera';icon();return}
-  if(m==='interlude'){A.pause();currentScene='i';L.textContent='Interludio poético · silencio';icon();return}
-  if(m==='appendix'){A.pause();currentScene='a';L.textContent='Cuaderno de creación · audio detenido';icon();return}
-  if(m===currentScene&&!force)return;
-  currentScene=m;L.textContent=String(m).padStart(2,'0')+' · '+titles[m-1];await setGlobal(cues[m-1],true);
+  if(!sync)return;
+  currentPage=page;waiting=false;pageEnd=null;
+  if(page<12){stopWithLabel('Preliminares · audio en espera');return}
+  if(ACT_SILENCE.has(page)){stopWithLabel('Pág. '+page+' · cambio de acto · silencio');return}
+  if(page>=48&&page<=52){stopWithLabel('Pág. '+page+' · interludio poético · silencio');return}
+  if(page>=68){stopWithLabel('Pág. '+page+' · cuaderno de creación · audio detenido');return}
+  const w=PW[String(page)];
+  if(!w){stopWithLabel('Pág. '+page+' · sin audio');return}
+  const [start,end,sc]=w;
+  currentScene=sc;pageEnd=end;
+  L.textContent='Pág. '+page+' · '+String(sc).padStart(2,'0')+' · '+titles[sc-1];
+  await setGlobal(start,true);
 }
 function parsePage(txt,dir){let label=(txt.split('·')[1]||'').trim();if(label==='Cubierta')return 1;if(label==='Contracubierta')return 74;let m=label.match(/(\d+)-(\d+)/);if(!m)return 1;return dir>=0?+m[1]:+m[2]}
-function hook(){let D=F.contentDocument;if(!D)return;let st=D.querySelector('#status'),enter=D.querySelector('#enter'),li=D.querySelector('#leftImg'),ri=D.querySelector('#rightImg'),si=D.querySelector('#singleImg');if(enter)enter.addEventListener('click',unlock,{once:true});if(st){let obs=new MutationObserver(()=>{let n=parseInt((st.textContent.match(/^(\d+)/)||[])[1]||'0'),dir=n>=lastState?1:-1;lastState=n;goPage(parsePage(st.textContent,dir))});obs.observe(st,{childList:true,subtree:true,characterData:true});}
-if(li)li.addEventListener('click',()=>{let m=(li.src.match(/page-(\d+)\.webp/)||[])[1];if(m)goPage(+m,true)});if(ri)ri.addEventListener('click',()=>{let m=(ri.src.match(/page-(\d+)\.webp/)||[])[1];if(m)goPage(+m,true)});if(si)si.addEventListener('click',()=>{let m=(si.src.match(/page-(\d+)\.webp/)||[])[1];if(m)goPage(+m,true)});}
+function hook(){
+  let D=F.contentDocument;if(!D)return;
+  let st=D.querySelector('#status'),enter=D.querySelector('#enter'),li=D.querySelector('#leftImg'),ri=D.querySelector('#rightImg'),si=D.querySelector('#singleImg');
+  if(enter)enter.addEventListener('click',unlock,{once:true});
+  if(st){let obs=new MutationObserver(()=>{let n=parseInt((st.textContent.match(/^(\d+)/)||[])[1]||'0'),dir=n>=lastState?1:-1;lastState=n;goPage(parsePage(st.textContent,dir),true)});obs.observe(st,{childList:true,subtree:true,characterData:true});}
+  if(li)li.addEventListener('click',()=>{let m=(li.src.match(/page-(\d+)\.webp/)||[])[1];if(m)goPage(+m,true)});
+  if(ri)ri.addEventListener('click',()=>{let m=(ri.src.match(/page-(\d+)\.webp/)||[])[1];if(m)goPage(+m,true)});
+  if(si)si.addEventListener('click',()=>{let m=(si.src.match(/page-(\d+)\.webp/)||[])[1];if(m)goPage(+m,true)});
+}
 F.addEventListener('load',hook);
-P.onclick=async()=>{unlocked=true;if(A.paused){try{await A.play()}catch(e){}}else A.pause();icon()};
-S.onclick=()=>{sync=!sync;S.classList.toggle('on',sync);S.textContent=sync?'SYNC':'LIBRE';L.textContent=sync?(currentScene&&Number.isInteger(currentScene)?String(currentScene).padStart(2,'0')+' · '+titles[currentScene-1]:'Sincronización activa'):'Máster continuo · modo libre'};
-A.ontimeupdate=()=>{const g=Math.min(TOTAL,globalTime());Q.value=g;T.textContent=fmt(g)+' / '+fmt(TOTAL)};
+P.onclick=async()=>{
+  unlocked=true;
+  if(sync&&waiting){
+    const w=PW[String(currentPage)];
+    if(w){waiting=false;pageEnd=w[1];L.textContent='Pág. '+currentPage+' · '+String(w[2]).padStart(2,'0')+' · '+titles[w[2]-1];await setGlobal(w[0],true);}
+    return;
+  }
+  if(A.paused){try{await A.play()}catch(e){}}else A.pause();icon();
+};
+S.onclick=async()=>{
+  sync=!sync;S.classList.toggle('on',sync);S.textContent=sync?'SYNC':'LIBRE';
+  if(sync)await goPage(currentPage,true);else{pageEnd=null;waiting=false;L.textContent='Máster continuo · modo libre'}
+};
+A.ontimeupdate=()=>{
+  const g=Math.min(TOTAL,globalTime());Q.value=g;T.textContent=fmt(g)+' / '+fmt(TOTAL);
+  if(sync&&pageEnd!==null&&!waiting&&g>=pageEnd-0.10){
+    A.pause();waiting=true;Q.value=pageEnd;T.textContent=fmt(pageEnd)+' / '+fmt(TOTAL);
+    const w=PW[String(currentPage)],sc=w?w[2]:currentScene;
+    L.textContent='Pág. '+currentPage+' · '+String(sc).padStart(2,'0')+' · '+titles[sc-1]+' · esperando pasar página';
+    icon();
+  }
+};
 A.onplay=icon;A.onpause=icon;
-A.onended=async()=>{if(!switching&&currentPart===1){currentPart=2;A.src=PART2;A.load();await waitMeta();A.currentTime=0;if(unlocked){try{await A.play()}catch(e){}}}else icon()};
-Q.oninput=()=>{sync=false;S.classList.remove('on');S.textContent='LIBRE';L.textContent='Máster continuo · posición manual';T.textContent=fmt(+Q.value)+' / '+fmt(TOTAL)};
+A.onended=async()=>{
+  if(sync){A.pause();waiting=true;icon();return}
+  if(!switching&&currentPart===1){currentPart=2;A.src=PART2;A.load();await waitMeta();A.currentTime=0;if(unlocked){try{await A.play()}catch(e){}}}else icon();
+};
+Q.oninput=()=>{sync=false;S.classList.remove('on');S.textContent='LIBRE';pageEnd=null;waiting=false;L.textContent='Máster continuo · posición manual';T.textContent=fmt(+Q.value)+' / '+fmt(TOTAL)};
 Q.onchange=async()=>{unlocked=true;await setGlobal(+Q.value,true)};
 V.oninput=()=>A.volume=+V.value;
 </script>
