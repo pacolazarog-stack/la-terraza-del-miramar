@@ -1,0 +1,8 @@
+{
+  "name": "La terraza del Miramar · Tragicomedia visual",
+  "short_name": "Miramar",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#06070b",
+  "theme_color": "#06070b"
+}

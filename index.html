@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#06070b">
+<title>La terraza del Miramar · Tragicomedia visual</title>
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+:root {
+  --night:#06070b;
+  --blue:#071426;
+  --blue2:#0b223a;
+  --paper:#f5f2eb;
+  --ink:#171313;
+  --red:#9b241d;
+  --amber:#c18b48;
+  --muted:#a9a2a0;
+  --line:rgba(255,255,255,.14);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  overflow:hidden;
+  color:#f5f0e9;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(145,34,28,.14), transparent 20%),
+    radial-gradient(circle at 50% 50%, rgba(16,45,76,.45), transparent 50%),
+    linear-gradient(180deg,#05070b 0%,#07111e 56%,#030406 100%);
+  font-family:Georgia,"Times New Roman",serif;
+}
+body:before{
+  content:"";
+  position:fixed;inset:0;pointer-events:none;opacity:.3;
+  background:
+    linear-gradient(90deg,transparent 49.85%,rgba(255,255,255,.035) 50%,transparent 50.15%),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.015) 0 1px,transparent 1px 4px);
+  mix-blend-mode:screen;
+}
+#app{height:100%;display:grid;grid-template-rows:auto 1fr auto}
+header{
+  position:relative;z-index:10;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:14px clamp(14px,3vw,40px);
+  border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(2,3,5,.88),rgba(2,3,5,.46));
+  backdrop-filter:blur(12px);
+}
+.brand{min-width:0}
+.brand .kicker{font-size:10px;letter-spacing:.34em;color:#b7473c;text-transform:uppercase;margin-bottom:4px}
+.brand h1{margin:0;font-weight:400;font-size:clamp(18px,2.3vw,30px);letter-spacing:.07em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand p{margin:4px 0 0;color:#aaa2a0;font-size:12px;font-style:italic}
+.tools{display:flex;gap:8px;align-items:center}
+button{
+  font:inherit;color:#efe8df;background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.17);border-radius:999px;
+  min-width:42px;height:42px;padding:0 14px;cursor:pointer;
+  transition:.18s ease;backdrop-filter:blur(8px)
+}
+button:hover{border-color:rgba(193,139,72,.7);background:rgba(193,139,72,.09)}
+button:disabled{opacity:.28;cursor:default}
+#stage{position:relative;display:grid;place-items:center;min-height:0;overflow:hidden;padding:18px}
+#stage:before,#stage:after{
+  content:"";position:absolute;top:-4%;bottom:-4%;width:20vw;max-width:330px;pointer-events:none;opacity:.78
+}
+#stage:before{left:-4vw;background:linear-gradient(90deg,#010204 0%,#050813 54%,transparent 100%);filter:drop-shadow(14px 0 18px rgba(0,0,0,.8))}
+#stage:after{right:-4vw;background:linear-gradient(270deg,#010204 0%,#050813 54%,transparent 100%);filter:drop-shadow(-14px 0 18px rgba(0,0,0,.8))}
+.spotlight{
+  position:absolute;top:-24%;left:50%;width:min(70vw,950px);height:90%;
+  transform:translateX(-50%);pointer-events:none;opacity:.58;
+  background:conic-gradient(from 168deg at 50% 0%,transparent 0 12deg,rgba(248,231,200,.09) 16deg,transparent 22deg);
+  filter:blur(4px)
+}
+#book{
+  position:relative;width:min(96vw,1420px);height:100%;max-height:calc(100vh - 150px);
+  perspective:2800px;display:grid;place-items:center;z-index:3
+}
+.view{position:absolute;inset:0;display:none;align-items:center;justify-content:center}
+.view.active{display:flex}
+.cover-frame{
+  position:relative;height:min(88vh,calc(100vh - 185px));max-height:100%;
+  box-shadow:0 34px 80px rgba(0,0,0,.66),0 0 0 1px rgba(255,255,255,.08);
+  transform:translateZ(0)
+}
+.cover-frame img{height:100%;display:block}
+.cover-frame:after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,rgba(255,255,255,.04),transparent 10% 88%,rgba(0,0,0,.22))
+}
+.spread{
+  position:relative;height:min(86vh,calc(100vh - 195px));max-height:100%;
+  display:grid;grid-template-columns:auto auto;gap:12px;align-items:stretch;justify-content:center;
+  filter:drop-shadow(0 28px 42px rgba(0,0,0,.55))
+}
+.page{position:relative;height:100%;background:var(--paper);overflow:hidden}
+.page img{height:100%;width:auto;display:block}
+.page.left{transform:perspective(2200px) rotateY(1.15deg);transform-origin:right center}
+.page.right{transform:perspective(2200px) rotateY(-1.15deg);transform-origin:left center}
+.page.left:after,.page.right:before{
+  content:"";position:absolute;top:0;bottom:0;width:54px;pointer-events:none;z-index:2
+}
+.page.left:after{right:0;background:linear-gradient(270deg,rgba(0,0,0,.22),rgba(0,0,0,.055) 35%,transparent)}
+.page.right:before{left:0;background:linear-gradient(90deg,rgba(0,0,0,.18),rgba(0,0,0,.045) 38%,transparent)}
+.gutter{
+  position:absolute;left:50%;top:1%;bottom:1%;width:18px;transform:translateX(-50%);z-index:4;pointer-events:none;
+  background:radial-gradient(ellipse at center,rgba(0,0,0,.34),rgba(0,0,0,.08) 42%,transparent 72%);
+  filter:blur(2px)
+}
+#flipLayer{position:absolute;inset:0;z-index:12;pointer-events:none;display:none}
+.sheet{
+  position:absolute;top:7%;height:86%;width:calc((100% - 12px)/2);
+  transform-style:preserve-3d;will-change:transform;
+}
+.sheet.next{right:0;transform-origin:left center}
+.sheet.prev{left:0;transform-origin:right center}
+.face{position:absolute;inset:0;background:var(--paper);backface-visibility:hidden;overflow:hidden;box-shadow:0 22px 48px rgba(0,0,0,.35)}
+.face img{height:100%;width:100%;object-fit:contain;display:block}
+.face.back{transform:rotateY(180deg)}
+.sheet.next.turn{animation:turnN .84s cubic-bezier(.55,.08,.25,1) forwards}
+.sheet.prev.turn{animation:turnP .84s cubic-bezier(.55,.08,.25,1) forwards}
+@keyframes turnN{0%{transform:rotateY(0)}48%{filter:brightness(.79)}100%{transform:rotateY(-180deg);filter:brightness(1)}}
+@keyframes turnP{0%{transform:rotateY(0)}48%{filter:brightness(.79)}100%{transform:rotateY(180deg);filter:brightness(1)}}
+.hot{position:absolute;top:0;bottom:0;width:16%;z-index:8;cursor:pointer}
+#hotPrev{left:0} #hotNext{right:0}
+footer{
+  z-index:10;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;
+  padding:10px clamp(14px,3vw,40px) 14px;border-top:1px solid var(--line);
+  background:rgba(3,4,7,.68);backdrop-filter:blur(12px)
+}
+.nav{display:flex;justify-content:flex-start;gap:8px}
+.status{text-align:center;color:#c7bdb4;font-size:12px;letter-spacing:.11em;text-transform:uppercase;white-space:nowrap}
+.progress{justify-self:end;width:min(28vw,330px);height:2px;background:rgba(255,255,255,.12);overflow:hidden}
+.progress>span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--amber));transition:width .3s ease}
+#intro{
+  position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:28px;
+  background:
+    radial-gradient(circle at 50% 40%,rgba(21,52,84,.5),transparent 42%),
+    linear-gradient(180deg,#020306,#07111d 58%,#020305);
+  transition:opacity .8s ease,visibility .8s ease
+}
+#intro.hidden{opacity:0;visibility:hidden}
+.intro-card{display:grid;grid-template-columns:minmax(180px,330px) minmax(240px,470px);gap:clamp(26px,5vw,70px);align-items:center;max-width:920px;width:100%}
+.intro-cover{position:relative;box-shadow:0 36px 72px rgba(0,0,0,.65);animation:float 6s ease-in-out infinite}
+.intro-cover img{display:block;width:100%;height:auto}
+.intro-cover:after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+@keyframes float{50%{transform:translateY(-7px)}}
+.intro-text .over{color:#be4c43;text-transform:uppercase;letter-spacing:.32em;font-size:11px}
+.intro-text h2{font-size:clamp(34px,5vw,68px);font-weight:400;line-height:.95;letter-spacing:.055em;text-transform:uppercase;margin:14px 0 16px}
+.intro-text .sub{font-style:italic;color:#c8bdb2;font-size:17px;line-height:1.55;margin-bottom:24px}
+.enter{height:auto;min-height:48px;padding:12px 22px;border-color:rgba(190,76,67,.7);background:rgba(155,36,29,.14);letter-spacing:.13em;text-transform:uppercase;font-size:12px}
+#drawer{
+ position:fixed;right:0;top:0;bottom:0;width:min(360px,88vw);z-index:80;
+ background:rgba(7,10,15,.97);border-left:1px solid var(--line);transform:translateX(100%);
+ transition:transform .32s ease;display:grid;grid-template-rows:auto 1fr
+}
+#drawer.open{transform:none}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:17px 16px;border-bottom:1px solid var(--line)}
+.drawer-head strong{font-weight:400;letter-spacing:.18em;text-transform:uppercase;font-size:12px}
+.thumbs{overflow:auto;padding:12px;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.thumb{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.025);padding:5px;cursor:pointer;transition:.18s}
+.thumb:hover{border-color:rgba(193,139,72,.6)}
+.thumb img{width:100%;display:block}
+.thumb small{display:block;text-align:center;color:#aaa2a0;padding:6px 0 2px;font:11px/1.2 system-ui,sans-serif}
+@media(max-width:800px){
+ header{padding-top:max(10px,env(safe-area-inset-top))}
+ .brand p{display:none}
+ .tools button span{display:none}
+ #stage{padding:8px}
+ #book{max-height:calc(100vh - 124px)}
+ .spread{gap:4px;height:min(78vh,calc(100vh - 155px))}
+ .page img{max-width:48vw;object-fit:contain}
+ .gutter{width:8px}
+ footer{grid-template-columns:1fr auto;padding-bottom:max(10px,env(safe-area-inset-bottom))}
+ .progress{display:none}
+ .intro-card{grid-template-columns:1fr;max-width:430px;text-align:center}
+ .intro-cover{width:46%;margin:auto}
+ .intro-text h2{font-size:36px}
+}
+</style>
+</head>
+<body>
+<div id="intro">
+  <div class="intro-card">
+    <div class="intro-cover"><img src="pages/page-01.webp" alt="Cubierta de La terraza del Miramar"></div>
+    <div class="intro-text">
+      <div class="over">Edición digital escénica</div>
+      <h2>La terraza<br>del Miramar</h2>
+      <div class="sub">Tragicomedia visual · Monólogo para Francisca — drag queen —, tres maniquíes, veinte carocas, una sábana y una comunidad conectada.</div>
+      <button class="enter" id="enter">Entrar en la terraza</button>
+    </div>
+  </div>
+</div>
+
+<div id="drawer">
+  <div class="drawer-head"><strong>Páginas</strong><button id="closeDrawer" aria-label="Cerrar">×</button></div>
+  <div class="thumbs" id="thumbs"></div>
+</div>
+
+<div id="app">
+<header>
+  <div class="brand">
+    <div class="kicker">Tragicomedia visual</div>
+    <h1>La terraza del Miramar</h1>
+    <p>El suelo conoce la linde. La mirada no sabe nada.</p>
+  </div>
+  <div class="tools">
+    <button id="thumbBtn" title="Miniaturas">▦ <span>Índice</span></button>
+    <button id="fullBtn" title="Pantalla completa">⛶ <span>Pantalla</span></button>
+  </div>
+</header>
+<main id="stage">
+  <div class="spotlight"></div>
+  <div id="book">
+    <div class="hot" id="hotPrev"></div><div class="hot" id="hotNext"></div>
+    <div class="view active" id="singleView"><div class="cover-frame"><img id="singleImg" alt=""></div></div>
+    <div class="view" id="spreadView">
+      <div class="spread">
+        <div class="page left"><img id="leftImg" alt=""></div>
+        <div class="page right"><img id="rightImg" alt=""></div>
+        <div class="gutter"></div>
+      </div>
+    </div>
+    <div id="flipLayer"></div>
+  </div>
+</main>
+<footer>
+  <div class="nav"><button id="prev">←</button><button id="next">→</button></div>
+  <div class="status" id="status"></div>
+  <div class="progress"><span id="bar"></span></div>
+</footer>
+</div>
+
+<script>
+const states=[{"type": "single", "label": "Cubierta", "page": 1}, {"type": "spread", "label": "2-3", "left": 2, "right": 3}, {"type": "spread", "label": "4-5", "left": 4, "right": 5}, {"type": "spread", "label": "6-7", "left": 6, "right": 7}, {"type": "spread", "label": "8-9", "left": 8, "right": 9}, {"type": "spread", "label": "10-11", "left": 10, "right": 11}, {"type": "spread", "label": "12-13", "left": 12, "right": 13}, {"type": "spread", "label": "14-15", "left": 14, "right": 15}, {"type": "spread", "label": "16-17", "left": 16, "right": 17}, {"type": "spread", "label": "18-19", "left": 18, "right": 19}, {"type": "spread", "label": "20-21", "left": 20, "right": 21}, {"type": "spread", "label": "22-23", "left": 22, "right": 23}, {"type": "spread", "label": "24-25", "left": 24, "right": 25}, {"type": "spread", "label": "26-27", "left": 26, "right": 27}, {"type": "spread", "label": "28-29", "left": 28, "right": 29}, {"type": "spread", "label": "30-31", "left": 30, "right": 31}, {"type": "spread", "label": "32-33", "left": 32, "right": 33}, {"type": "spread", "label": "34-35", "left": 34, "right": 35}, {"type": "spread", "label": "36-37", "left": 36, "right": 37}, {"type": "spread", "label": "38-39", "left": 38, "right": 39}, {"type": "spread", "label": "40-41", "left": 40, "right": 41}, {"type": "spread", "label": "42-43", "left": 42, "right": 43}, {"type": "spread", "label": "44-45", "left": 44, "right": 45}, {"type": "spread", "label": "46-47", "left": 46, "right": 47}, {"type": "spread", "label": "48-49", "left": 48, "right": 49}, {"type": "spread", "label": "50-51", "left": 50, "right": 51}, {"type": "spread", "label": "52-53", "left": 52, "right": 53}, {"type": "spread", "label": "54-55", "left": 54, "right": 55}, {"type": "spread", "label": "56-57", "left": 56, "right": 57}, {"type": "spread", "label": "58-59", "left": 58, "right": 59}, {"type": "spread", "label": "60-61", "left": 60, "right": 61}, {"type": "spread", "label": "62-63", "left": 62, "right": 63}, {"type": "spread", "label": "64-65", "left": 64, "right": 65}, {"type": "spread", "label": "66-67", "left": 66, "right": 67}, {"type": "spread", "label": "68-69", "left": 68, "right": 69}, {"type": "spread", "label": "70-71", "left": 70, "right": 71}, {"type": "spread", "label": "72-73", "left": 72, "right": 73}, {"type": "single", "label": "Contracubierta", "page": 74}];
+let current=0,busy=false;
+const $=s=>document.querySelector(s);
+const singleView=$("#singleView"),spreadView=$("#spreadView");
+const singleImg=$("#singleImg"),leftImg=$("#leftImg"),rightImg=$("#rightImg");
+const status=$("#status"),bar=$("#bar"),flipLayer=$("#flipLayer");
+const p=n=>`pages/page-${String(n).padStart(2,"0")}.webp`;
+const t=n=>`thumbs/page-${String(n).padStart(2,"0")}.webp`;
+
+function render(i){
+  const st=states[i];
+  if(st.type==="single"){
+    singleView.classList.add("active");spreadView.classList.remove("active");singleImg.src=p(st.page);
+  }else{
+    singleView.classList.remove("active");spreadView.classList.add("active");leftImg.src=p(st.left);rightImg.src=p(st.right);
+  }
+  status.textContent=`${i+1} / ${states.length} · ${st.label}`;
+  bar.style.width=`${(i/(states.length-1))*100}%`;
+  $("#prev").disabled=i===0;$("#next").disabled=i===states.length-1;
+}
+function flip(front,back,dir){
+  flipLayer.innerHTML=`<div class="sheet ${dir>0?"next":"prev"}" id="sheet">
+  <div class="face front"><img src="${front}"></div>
+  <div class="face back"><img src="${back}"></div></div>`;
+  flipLayer.style.display="block";
+  requestAnimationFrame(()=>$("#sheet").classList.add("turn"));
+  setTimeout(()=>{flipLayer.style.display="none";flipLayer.innerHTML="";busy=false},880);
+}
+function go(i){
+  if(busy||i<0||i>=states.length||i===current)return;
+  const old=states[current],neu=states[i],dir=i>current?1:-1;busy=true;
+  if(old.type==="spread"&&neu.type==="spread"){
+    const front=dir>0?p(old.right):p(old.left);
+    const back=dir>0?p(neu.left):p(neu.right);
+    render(i);flip(front,back,dir);
+  }else{
+    render(i);setTimeout(()=>busy=false,280);
+  }
+  current=i;
+}
+$("#prev").onclick=()=>go(current-1); $("#next").onclick=()=>go(current+1);
+$("#hotPrev").onclick=()=>go(current-1); $("#hotNext").onclick=()=>go(current+1);
+document.addEventListener("keydown",e=>{if(e.key==="ArrowRight")go(current+1);if(e.key==="ArrowLeft")go(current-1);if(e.key==="Escape")$("#drawer").classList.remove("open")});
+$("#enter").onclick=()=>$("#intro").classList.add("hidden");
+$("#thumbBtn").onclick=()=>$("#drawer").classList.add("open");
+$("#closeDrawer").onclick=()=>$("#drawer").classList.remove("open");
+$("#fullBtn").onclick=()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()};
+
+let sx=0,sy=0;
+$("#stage").addEventListener("touchstart",e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+$("#stage").addEventListener("touchend",e=>{
+  const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy))go(current+(dx<0?1:-1));
+},{passive:true});
+
+const thumbs=$("#thumbs");
+for(let i=1;i<=74;i++){
+  const d=document.createElement("div");d.className="thumb";
+  d.innerHTML=`<img loading="lazy" src="${t(i)}" alt=""><small>Página ${i}</small>`;
+  d.onclick=()=>{
+    let idx=0;
+    if(i===1)idx=0; else if(i===74)idx=states.length-1; else idx=1+Math.floor((i-2)/2);
+    $("#drawer").classList.remove("open");go(idx);
+  };
+  thumbs.appendChild(d);
+}
+render(0);
+</script>
+</body>
+</html>
