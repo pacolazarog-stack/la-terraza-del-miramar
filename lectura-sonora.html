@@ -11,7 +11,7 @@ iframe{width:100%;height:100%;border:0;background:#05070b}
 #bar{display:flex;align-items:center;gap:9px;padding:8px 12px;background:#080b12;border-top:1px solid rgba(255,255,255,.14)}
 button{height:36px;min-width:38px;border-radius:18px;border:1px solid rgba(255,255,255,.18);background:#10151f;color:#eee;cursor:pointer}
 button.on{border-color:#c18b48;color:#f2d3aa;background:#221b13}
-#scene{min-width:230px;max-width:360px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;color:#d1c7bd}
+#scene{min-width:230px;max-width:390px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;color:#d1c7bd}
 #seek{flex:1;accent-color:#a53129}#vol{width:90px;accent-color:#c18b48}.time{font-size:11px;color:#aaa;white-space:nowrap}
 @media(max-width:800px){#wrap{grid-template-rows:1fr 92px}#bar{flex-wrap:wrap}.time{display:none}#vol{display:none}#scene{order:5;max-width:none;min-width:0;flex:1 1 100%}}
 </style>
@@ -23,32 +23,61 @@ button.on{border-color:#c18b48;color:#f2d3aa;background:#221b13}
 <button id="play">▶</button>
 <button id="sync" class="on">SYNC</button>
 <span id="scene">Preliminares · audio en espera</span>
-<input id="seek" type="range" min="0" max="2914.704" step="0.1" value="0">
-<span class="time" id="time">0:00 / 48:35</span>
+<input id="seek" type="range" min="0" max="3822.912" step="0.1" value="0">
+<span class="time" id="time">0:00 / 1:03:43</span>
 <input id="vol" type="range" min="0" max="1" step="0.01" value="0.82">
 </div>
 </div>
-<audio id="audio" preload="metadata" src="MIRAMAR_AUDIO_WEB_64K.mp3"></audio>
+<audio id="audio" preload="metadata" src="audio/LA_TERRAZA_DEL_MIRAMAR_MASTER_64K_PARTE_1_ESC_01-15.mp3"></audio>
 <script>
 const A=document.getElementById('audio'),F=document.getElementById('book'),P=document.getElementById('play'),S=document.getElementById('sync'),Q=document.getElementById('seek'),V=document.getElementById('vol'),L=document.getElementById('scene'),T=document.getElementById('time');
-const cues=[0,46.28,150.03,207.51,237.59,370.93,440.50,544.65,662.80,771.45,811.43,963.76,1072.21,1136.18,1304.81,1410.46,1465.34,1551.50,1628.66,1744.61,1849.16,1905.64,1981.10,2042.77,2131.43,2182.21,2289.76,2426.50,2473.68,2758.25];
-const titles=['Primer WhatsApp','Dos letras y un desastre','El cuerpo en casa','CLAC','Donde antes no había escena','No es que mire','Primera incursión terrestre','Diecisiete con cuatro','La comunidad toma la palabra','Primera votación','Antiguo Testamento del bloque','Dos cosas ciertas','Ropa · frontera · muro','Toga · bandera · reina','Ganar una cárcel','El viento recurre','El sol da fe','Señoría: la sábana','Informe del informe','El edificio es un ojo','Innovar para no hablar','El sistema perfecto','Junta de una sola persona','Catastro del cotilleo','Vicente puso una sábana','La ausencia también ocupa','No te miro. Pero me mides','¿Cómo seguimos?','¡HE! COMUNIDAD','Diez minutos'];
-const pageScene={12:1,13:2,14:3,15:4,16:5,17:5,18:6,20:7,21:8,22:9,23:9,24:10,25:11,26:12,27:12,28:13,29:14,30:15,31:16,32:17,33:18,34:18,35:18,36:19,37:20,38:21,39:22,40:23,41:24,42:24,43:25,44:26,45:27,46:27,47:28,53:29,54:29,55:29,56:29,57:29,58:29,59:29,60:29,61:29,62:29,63:29,64:30,65:30,66:30,67:30};
-let sync=true,lastState=0,currentScene=null,unlocked=false;
+const PART1='audio/LA_TERRAZA_DEL_MIRAMAR_MASTER_64K_PARTE_1_ESC_01-15.mp3';
+const PART2='audio/LA_TERRAZA_DEL_MIRAMAR_MASTER_64K_PARTE_2_ESC_16-30.mp3';
+const SPLIT=1830.432,TOTAL=3822.912;
+const cues=[0,69.672,175.872,251.424,308.112,472.800,578.832,728.520,855.048,990.528,1088.040,1245.432,1402.272,1498.992,1704.480,1830.432,1909.920,2018.760,2130.360,2294.088,2418.096,2506.536,2612.088,2701.848,2787.288,2887.728,3024.408,3174.168,3260.976,3626.232];
+const titles=['Primer WhatsApp','Dos letras y un desastre','El cuerpo en casa','CLAC','Donde antes no había escena','No es que mire','Primera incursión terrestre','Diecisiete con cuatro','La comunidad toma la palabra','Primera votación','Antiguo Testamento del bloque','Dos cosas ciertas','Ropa · frontera · muro','Nace el Estado · Toga · bandera · reina','Ganar una cárcel','El viento recurre','El sol da fe','Señoría la sábana','Informe del informe','El edificio es un ojo','Innovar para no hablar','El sistema perfecto','Junta de una sola persona','Catastro del cotilleo','Vicente puso una sábana','La ausencia también ocupa','No te miro. Pero me mides','¿Cómo seguimos?','¡HE! COMUNIDAD','Diez minutos'];
+const pageScene={12:1,13:2,14:3,15:4,16:5,17:5,18:6,19:6,20:7,21:8,22:9,23:9,24:10,25:11,26:12,27:12,28:13,29:14,30:15,31:16,32:17,33:18,34:18,35:18,36:19,37:20,38:21,39:22,40:23,41:24,42:24,43:25,44:26,45:27,46:27,47:28,53:29,54:29,55:29,56:29,57:29,58:29,59:29,60:29,61:29,62:29,63:29,64:30,65:30,66:30,67:30};
+let sync=true,lastState=0,currentScene=null,unlocked=false,currentPart=1,switching=false;
 A.volume=.82;
-const fmt=s=>{s=Math.max(0,s||0);let m=Math.floor(s/60),x=Math.floor(s%60);return m+':'+String(x).padStart(2,'0')};
+const fmt=s=>{s=Math.max(0,s||0);let h=Math.floor(s/3600),m=Math.floor((s%3600)/60),x=Math.floor(s%60);return (h?h+':':'')+String(m).padStart(h?2:1,'0')+':'+String(x).padStart(2,'0')};
 function icon(){P.textContent=A.paused?'▶':'❚❚'}
 function mode(page){if(page>=48&&page<=52)return'interlude';if(page>=68)return'appendix';if(pageScene[page])return pageScene[page];return'front'}
-async function unlock(){try{A.muted=true;await A.play();A.pause();A.currentTime=0;A.muted=false;unlocked=true}catch(e){A.muted=false}}
-async function goPage(page,force=false){if(!sync)return;let m=mode(page);if(m==='front'){A.pause();currentScene=null;L.textContent='Preliminares · audio en espera';icon();return}if(m==='interlude'){A.pause();currentScene='i';L.textContent='Interludio poético · silencio';icon();return}if(m==='appendix'){A.pause();currentScene='a';L.textContent='Cuaderno de creación · audio detenido';icon();return}if(m===currentScene&&!force)return;currentScene=m;A.currentTime=cues[m-1];L.textContent=String(m).padStart(2,'0')+' · '+titles[m-1];if(unlocked){try{await A.play()}catch(e){}}icon()}
+function globalTime(){return(currentPart===1?0:SPLIT)+(A.currentTime||0)}
+function sourceForGlobal(g){return g<SPLIT?1:2}
+function srcForPart(p){return p===1?PART1:PART2}
+function localForGlobal(g,p){return Math.max(0,g-(p===1?0:SPLIT))}
+function waitMeta(){return new Promise(r=>{if(A.readyState>=1)r();else A.addEventListener('loadedmetadata',r,{once:true})})}
+async function setGlobal(g,autoplay=false){
+  g=Math.max(0,Math.min(TOTAL,g));
+  const p=sourceForGlobal(g),local=localForGlobal(g,p);
+  if(p!==currentPart||A.getAttribute('src')!==srcForPart(p)){
+    switching=true;A.pause();currentPart=p;A.src=srcForPart(p);A.load();await waitMeta();switching=false;
+  }
+  try{A.currentTime=Math.min(local,Math.max(0,(A.duration||local)-0.02));}catch(e){}
+  Q.value=g;T.textContent=fmt(g)+' / '+fmt(TOTAL);
+  if(autoplay&&unlocked){try{await A.play()}catch(e){}}icon();
+}
+async function unlock(){try{A.muted=true;await A.play();A.pause();A.currentTime=0;A.muted=false;unlocked=true}catch(e){A.muted=false;unlocked=true}}
+async function goPage(page,force=false){
+  if(!sync)return;let m=mode(page);
+  if(m==='front'){A.pause();currentScene=null;L.textContent='Preliminares · audio en espera';icon();return}
+  if(m==='interlude'){A.pause();currentScene='i';L.textContent='Interludio poético · silencio';icon();return}
+  if(m==='appendix'){A.pause();currentScene='a';L.textContent='Cuaderno de creación · audio detenido';icon();return}
+  if(m===currentScene&&!force)return;
+  currentScene=m;L.textContent=String(m).padStart(2,'0')+' · '+titles[m-1];await setGlobal(cues[m-1],true);
+}
 function parsePage(txt,dir){let label=(txt.split('·')[1]||'').trim();if(label==='Cubierta')return 1;if(label==='Contracubierta')return 74;let m=label.match(/(\d+)-(\d+)/);if(!m)return 1;return dir>=0?+m[1]:+m[2]}
 function hook(){let D=F.contentDocument;if(!D)return;let st=D.querySelector('#status'),enter=D.querySelector('#enter'),li=D.querySelector('#leftImg'),ri=D.querySelector('#rightImg'),si=D.querySelector('#singleImg');if(enter)enter.addEventListener('click',unlock,{once:true});if(st){let obs=new MutationObserver(()=>{let n=parseInt((st.textContent.match(/^(\d+)/)||[])[1]||'0'),dir=n>=lastState?1:-1;lastState=n;goPage(parsePage(st.textContent,dir))});obs.observe(st,{childList:true,subtree:true,characterData:true});}
 if(li)li.addEventListener('click',()=>{let m=(li.src.match(/page-(\d+)\.webp/)||[])[1];if(m)goPage(+m,true)});if(ri)ri.addEventListener('click',()=>{let m=(ri.src.match(/page-(\d+)\.webp/)||[])[1];if(m)goPage(+m,true)});if(si)si.addEventListener('click',()=>{let m=(si.src.match(/page-(\d+)\.webp/)||[])[1];if(m)goPage(+m,true)});}
 F.addEventListener('load',hook);
 P.onclick=async()=>{unlocked=true;if(A.paused){try{await A.play()}catch(e){}}else A.pause();icon()};
-S.onclick=()=>{sync=!sync;S.classList.toggle('on',sync);S.textContent=sync?'SYNC':'LIBRE';L.textContent=sync?'Sincronización activa':'Máster continuo · modo libre'};
-A.ontimeupdate=()=>{Q.value=A.currentTime;T.textContent=fmt(A.currentTime)+' / 48:35'};A.onplay=icon;A.onpause=icon;
-Q.oninput=()=>{sync=false;S.classList.remove('on');S.textContent='LIBRE';A.currentTime=+Q.value;L.textContent='Máster continuo · posición manual'};Q.onchange=()=>{unlocked=true;A.play().catch(()=>{});icon()};V.oninput=()=>A.volume=+V.value;
+S.onclick=()=>{sync=!sync;S.classList.toggle('on',sync);S.textContent=sync?'SYNC':'LIBRE';L.textContent=sync?(currentScene&&Number.isInteger(currentScene)?String(currentScene).padStart(2,'0')+' · '+titles[currentScene-1]:'Sincronización activa'):'Máster continuo · modo libre'};
+A.ontimeupdate=()=>{const g=Math.min(TOTAL,globalTime());Q.value=g;T.textContent=fmt(g)+' / '+fmt(TOTAL)};
+A.onplay=icon;A.onpause=icon;
+A.onended=async()=>{if(!switching&&currentPart===1){currentPart=2;A.src=PART2;A.load();await waitMeta();A.currentTime=0;if(unlocked){try{await A.play()}catch(e){}}}else icon()};
+Q.oninput=()=>{sync=false;S.classList.remove('on');S.textContent='LIBRE';L.textContent='Máster continuo · posición manual';T.textContent=fmt(+Q.value)+' / '+fmt(TOTAL)};
+Q.onchange=async()=>{unlocked=true;await setGlobal(+Q.value,true)};
+V.oninput=()=>A.volume=+V.value;
 </script>
 </body>
 </html>
