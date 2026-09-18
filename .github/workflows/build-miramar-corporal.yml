@@ -1,0 +1,77 @@
+name: Build Miramar corporal score
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'assets/audio/corporal-v1/generate_audio.py'
+      - 'assets/audio/corporal-v1/MATRIZ_TIEMPOS_EXACTOS_30_ESCENAS.csv'
+      - 'assets/audio/corporal-v1/README.md'
+      - '.github/workflows/build-miramar-corporal.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install audio dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg espeak-ng libsndfile1
+          python -m pip install --upgrade pip
+          python -m pip install numpy scipy soundfile
+
+      - name: Generate corporal score
+        run: |
+          python assets/audio/corporal-v1/generate_audio.py
+
+      - name: Validate exact duration and outputs
+        run: |
+          test -f assets/audio/corporal-v1/MASTER_MIRAMAR_CORPORAL_42m40.mp3
+          test -f assets/audio/corporal-v1/MANIFIESTO_AUDIO.json
+          test -f audio/LA_TERRAZA_DEL_MIRAMAR_CORPORAL_64K_PARTE_1_ESC_01-15.mp3
+          test -f audio/LA_TERRAZA_DEL_MIRAMAR_CORPORAL_64K_PARTE_2_ESC_16-30.mp3
+          test "$(find assets/audio/corporal-v1/build/flac -maxdepth 1 -type f -name '*.flac' | wc -l)" -eq 31
+          test "$(find assets/audio/corporal-v1/build/mp3 -maxdepth 1 -type f -name '*.mp3' | wc -l)" -eq 30
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('assets/audio/corporal-v1/MANIFIESTO_AUDIO.json')
+          d=json.loads(p.read_text(encoding='utf-8'))
+          assert d['total_duration_seconds']==2560
+          assert d['total_duration']=='42:40'
+          assert len(d['scenes'])==30
+          print('Validated 42:40 / 30 scenes')
+          PY
+
+      - name: Upload lossless and per-scene montage package
+        uses: actions/upload-artifact@v4
+        with:
+          name: miramar-corporal-audio-v1
+          path: assets/audio/corporal-v1/build/
+          retention-days: 90
+          compression-level: 0
+
+      - name: Commit corporal master and web audio
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/audio/corporal-v1/MASTER_MIRAMAR_CORPORAL_42m40.mp3
+          git add assets/audio/corporal-v1/MANIFIESTO_AUDIO.json
+          git add audio/LA_TERRAZA_DEL_MIRAMAR_CORPORAL_64K_PARTE_1_ESC_01-15.mp3
+          git add audio/LA_TERRAZA_DEL_MIRAMAR_CORPORAL_64K_PARTE_2_ESC_16-30.mp3
+          git commit -m "Add Miramar corporal 42m40 audio score" || exit 0
+          git push
