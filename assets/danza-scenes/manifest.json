@@ -1,0 +1,156 @@
+{
+  "title": "La terraza del Miramar · Danza libre",
+  "count": 30,
+  "scenes": [
+    {
+      "scene": 1,
+      "title": "MIRAMAR COMUNIDAD",
+      "image": "assets/danza-scenes/images/01_MIRAMAR_COMUNIDAD.png"
+    },
+    {
+      "scene": 2,
+      "title": "OK",
+      "image": "assets/danza-scenes/images/02_OK.png"
+    },
+    {
+      "scene": 3,
+      "title": "EL CUERPO",
+      "image": "assets/danza-scenes/images/03_EL_CUERPO.png"
+    },
+    {
+      "scene": 4,
+      "title": "CLAC",
+      "image": "assets/danza-scenes/images/04_CLAC.png"
+    },
+    {
+      "scene": 5,
+      "title": "NADIE",
+      "image": "assets/danza-scenes/images/05_NADIE.png"
+    },
+    {
+      "scene": 6,
+      "title": "NACE EL CONFLICTO",
+      "image": "assets/danza-scenes/images/06_NACE_EL_CONFLICTO.png"
+    },
+    {
+      "scene": 7,
+      "title": "PRIMERA INCURSIÓN TERRESTRE",
+      "image": "assets/danza-scenes/images/07_PRIMERA_INCURSION_TERRESTRE.png"
+    },
+    {
+      "scene": 8,
+      "title": "TERRITORIO",
+      "image": "assets/danza-scenes/images/08_TERRITORIO.png"
+    },
+    {
+      "scene": 9,
+      "title": "MAYORÍA SIMPLE",
+      "image": "assets/danza-scenes/images/09_MAYORIA_SIMPLE.png"
+    },
+    {
+      "scene": 10,
+      "title": "VOTEN",
+      "image": "assets/danza-scenes/images/10_VOTEN.png"
+    },
+    {
+      "scene": 11,
+      "title": "MAYORÍA SIMPLE",
+      "image": "assets/danza-scenes/images/11_MAYORIA_SIMPLE.png"
+    },
+    {
+      "scene": 12,
+      "title": "NOSOTROS",
+      "image": "assets/danza-scenes/images/12_NOSOTROS.png"
+    },
+    {
+      "scene": 13,
+      "title": "DERECHO",
+      "image": "assets/danza-scenes/images/13_DERECHO.png"
+    },
+    {
+      "scene": 14,
+      "title": "TOGA · BANDERA · REINA",
+      "image": "assets/danza-scenes/images/14_TOGA_BANDERA_REINA.png"
+    },
+    {
+      "scene": 15,
+      "title": "MÍRENME",
+      "image": "assets/danza-scenes/images/15_MIRENME.png"
+    },
+    {
+      "scene": 16,
+      "title": "ESTADO",
+      "image": "assets/danza-scenes/images/16_ESTADO.png"
+    },
+    {
+      "scene": 17,
+      "title": "VIENTO",
+      "image": "assets/danza-scenes/images/17_VIENTO.png"
+    },
+    {
+      "scene": 18,
+      "title": "EL SOL",
+      "image": "assets/danza-scenes/images/18_EL_SOL.png"
+    },
+    {
+      "scene": 19,
+      "title": "CONFORME A DERECHO",
+      "image": "assets/danza-scenes/images/19_CONFORME_A_DERECHO.png"
+    },
+    {
+      "scene": 20,
+      "title": "QUE CONSTE",
+      "image": "assets/danza-scenes/images/20_QUE_CONSTE.png"
+    },
+    {
+      "scene": 21,
+      "title": "EL REINO CABE EN UNA CARPETA",
+      "image": "assets/danza-scenes/images/21_EL_REINO_CABE_EN_UNA_CARPETA.png"
+    },
+    {
+      "scene": 22,
+      "title": "MIRAMAR",
+      "image": "assets/danza-scenes/images/22_MIRAMAR.png"
+    },
+    {
+      "scene": 23,
+      "title": "INNOVAR",
+      "image": "assets/danza-scenes/images/23_INNOVAR.png"
+    },
+    {
+      "scene": 24,
+      "title": "¿QUIÉN GOBIERNA?",
+      "image": "assets/danza-scenes/images/24_QUIEN_GOBIERNA.png"
+    },
+    {
+      "scene": 25,
+      "title": "RUMOR",
+      "image": "assets/danza-scenes/images/25_RUMOR.png"
+    },
+    {
+      "scene": 26,
+      "title": "CENTRO DE DATOS",
+      "image": "assets/danza-scenes/images/26_CENTRO_DE_DATOS.png"
+    },
+    {
+      "scene": 27,
+      "title": "MIRA QUIÉN MIRA QUIÉN",
+      "image": "assets/danza-scenes/images/27_MIRA_QUIEN_MIRA_QUIEN.png"
+    },
+    {
+      "scene": 28,
+      "title": "CÓMO SEGUIMOS",
+      "image": "assets/danza-scenes/images/28_COMO_SEGUIMOS.png"
+    },
+    {
+      "scene": 29,
+      "title": "DESARMAR A LA REINA",
+      "image": "assets/danza-scenes/images/29_DESARMAR_A_LA_REINA.png"
+    },
+    {
+      "scene": 30,
+      "title": "DIEZ MINUTOS",
+      "image": "assets/danza-scenes/images/30_DIEZ_MINUTOS.png"
+    }
+  ]
+}
