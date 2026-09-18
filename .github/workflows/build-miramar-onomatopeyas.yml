@@ -1,0 +1,63 @@
+name: Build Miramar onomatopoeia score
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'assets/audio/onomatopeyas-v1/generate_audio.py'
+      - 'assets/audio/onomatopeyas-v1/MATRIZ_TIEMPOS_EXACTOS_30_ESCENAS.csv'
+      - 'assets/audio/onomatopeyas-v1/README.md'
+      - '.github/workflows/build-miramar-onomatopeyas.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install audio dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg espeak-ng libsndfile1
+          python -m pip install --upgrade pip
+          python -m pip install numpy scipy soundfile
+
+      - name: Generate exact 42:40 score
+        run: |
+          python assets/audio/onomatopeyas-v1/generate_audio.py
+
+      - name: Validate outputs
+        run: |
+          test "$(find assets/audio/onomatopeyas-v1/mp3 -maxdepth 1 -type f -name '*.mp3' | wc -l)" -eq 30
+          test -f assets/audio/onomatopeyas-v1/MASTER_MIRAMAR_ONOMATOPEYAS_PERCUSION_42m40.mp3
+          test -f assets/audio/onomatopeyas-v1/MANIFIESTO_AUDIO.json
+
+      - name: Upload sample-exact FLAC package
+        uses: actions/upload-artifact@v4
+        with:
+          name: miramar-partitura-sonora-flac-v1
+          path: assets/audio/onomatopeyas-v1/build/flac/
+          retention-days: 90
+          compression-level: 0
+
+      - name: Commit MP3 listening/montage set
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/audio/onomatopeyas-v1/mp3
+          git add assets/audio/onomatopeyas-v1/MASTER_MIRAMAR_ONOMATOPEYAS_PERCUSION_42m40.mp3
+          git add assets/audio/onomatopeyas-v1/MANIFIESTO_AUDIO.json
+          git commit -m "Add Miramar 42m40 onomatopoeia audio score" || exit 0
+          git push
